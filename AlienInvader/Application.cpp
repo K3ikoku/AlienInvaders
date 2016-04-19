@@ -5,7 +5,16 @@
 
 Application::Application()
 {
-	
+}
+
+
+Application::~Application()
+{
+}
+
+
+void Application::loadPictures()
+{
 	sf::Texture m_background; //Create variable for the background image and load the image
 	if (!m_background.loadFromFile("assets/sprites/background.png"))
 	{
@@ -13,7 +22,7 @@ Application::Application()
 	}
 
 	sf::Texture m_bulletEnemy; //Create variable for the enemy bullet image and load the image
-	if (!m_bulletEnemy.loadFromFile("asstes/sprites/bullet_enemy.png"))
+	if (!m_bulletEnemy.loadFromFile("assets/sprites/bullet_enemy.png"))
 	{
 		std::cout << "Error while loading enemy bullet image" << std::endl;
 	}
@@ -25,7 +34,7 @@ Application::Application()
 	}
 
 	sf::Texture m_enemy; //Create variable for enemy image and load the image
-	if (!m_enemy.loadFromFile("assets/sprites/enemy"))
+	if (!m_enemy.loadFromFile("assets/sprites/enemy.png"))
 	{
 		std::cout << "Error while loading enemy image" << std::endl;
 	}
@@ -54,9 +63,4 @@ Application::Application()
 		std::cout << "Error while loading stars image" << std::endl;
 	}
 
-}
-
-
-Application::~Application()
-{
 }

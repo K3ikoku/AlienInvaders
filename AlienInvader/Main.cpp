@@ -15,7 +15,7 @@ int main()
 		{
 			Application* application = new Application();
 
-			application->loadPictures();
+			application->awake();
 
 
 			// "close requested" event: we close the window

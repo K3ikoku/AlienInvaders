@@ -4,25 +4,24 @@
 
 int main()
 {
-	sf::Window m_window(sf::VideoMode(640, 955), "My window");
 
-	// run the program as long as the window is open
-	while (m_window.isOpen())
-	{
-		// check all the window's events that were triggered since the last iteration of the loop
-		sf::Event m_event;
-		while (m_window.pollEvent(m_event))
-		{
-			Application* application = new Application();
+	
+			Application* app = new Application();
 
-			application->awake();
-
-
-			// "close requested" event: we close the window
-			if (m_event.type == sf::Event::Closed)
-				m_window.close();
-		}
-	}
+			app->start();
+			// run the program as long as the window is open
+			while (app->m_window.isOpen())
+			{
+				// check all the window's events that were triggered since the last iteration of the loop
+				sf::Event m_event;
+				while (app->m_window.pollEvent(m_event))
+				{
+					app->gameLoop();
+				
+					// "close requested" event: we close the window
+					if (m_event.type == sf::Event::Closed)
+						app->m_window.close();
+				}
 
 	return 0;
 }

@@ -4,7 +4,6 @@
 
 Player::Player()
 {
-	int	m_player = 10;
 
 }
 

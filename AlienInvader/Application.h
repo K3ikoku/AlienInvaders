@@ -34,7 +34,7 @@ public:
 	sf::Sprite m_enemy;
 	sf::Sprite m_numeralX;
 	sf::Sprite m_player;
-	sf::Sprite m_playerLifeTexture;
+	sf::Sprite m_playerLife;
 	sf::Sprite m_stars;
 };
 

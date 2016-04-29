@@ -14,8 +14,8 @@ Application::~Application()
 
 void Application::start()
 {
-	sf::RenderWindow m_window(sf::VideoMode(640, 955), "My window");
 	loadPictures();
+	gameLoop();
 	Player* player = new Player();
 	
 }
@@ -24,7 +24,7 @@ void Application::start()
 void Application::loadPictures()
 {
 	sf::Texture m_backgroundTexture; //Create variable for the background image and load the image
-	if (!m_backgroundTexture.loadFromFile("assets/sprites/background.png", sf::IntRect(0, 0, 640, 955)))
+	if (!m_backgroundTexture.loadFromFile("assets/sprites/background.png", sf::IntRect(0, 0, 640, 960)))
 	{
 		std::cout << "Error while loading background image" << std::endl;
 	}
@@ -89,13 +89,21 @@ void Application::loadPictures()
 
 void Application::gameLoop()
 {
-	m_window.clear();
-
-	for each (object var in collection_to_loop)
+	sf::RenderWindow m_window(sf::VideoMode(640, 960), "My window");
+	// run the program as long as the window is open
+	while (m_window.isOpen())
 	{
+		// check all the window's events that were triggered since the last iteration of the loop
+		sf::Event m_event;
+		while (m_window.pollEvent(m_event))
+		{
+			
 
-	}
-	
+			// "close requested" event: we close the window
+			if (m_event.type == sf::Event::Closed)
+				m_window.close();
+		}
+	}	
 }
 	
 

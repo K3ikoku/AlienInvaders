@@ -3,24 +3,37 @@
 #include <stack>
 #include <SFML\Graphics.hpp>
 #include <SFML\System.hpp>
-#include "Application.h"
+#include "GameState.h"
+#include "TextureManager.h"
+#include "Player.h"
+#include "Enemy.h"
 
+class GameState;
 
-class Game : Application
+class Game
 {
 public:
 
-	std::stack<Application*> m_states;
+	std::stack<GameState*> m_states;
 
 	sf::RenderWindow m_window;
+	TextureManager m_texManager;
+	sf::Sprite m_background;
 
-	void pushState(Application* m_states);
+	void pushState(GameState* m_states);
 	void popState();
-	void changeState(Application* m_states);
-	Application* peekState();
+	void changeState(GameState* m_states);
+	GameState* peekState();
 
 	void gameLoop();
+
 	Game();
 	~Game();
+
+private: 
+	void loadTextures();
+	void loadPlayer();
+
+	
 };
 

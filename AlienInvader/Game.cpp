@@ -2,7 +2,7 @@
 #include <stack>
 
 
-void Game::pushState(Application* m_state)
+void Game::pushState(GameState* m_state)
 {
 	this->m_states.push(m_state);
 
@@ -17,7 +17,7 @@ void Game::popState()
 	return;
 }
 
-void Game::changeState(Application* m_state)
+void Game::changeState(GameState* m_state)
 {
 	if (!this->m_states.empty())
 		popState();
@@ -26,9 +26,9 @@ void Game::changeState(Application* m_state)
 	return;
 }
 
-Application* Game::peekState()
+GameState* Game::peekState()
 {
-	if (this->m_game - m_states.empty()) 
+	if (this->m_states.empty()) 
 		return nullptr;
 
 	return this->m_states.top();
@@ -54,12 +54,35 @@ void Game::gameLoop()
 }
 Game::Game()
 {
-	this->m_window.create(sf::VideoMode(640, 960, "Alien Invader"));
+	this->loadTextures();
+	this->loadPlayer();
+
+	this->m_window.create(sf::VideoMode(640, 960), "Alien Invader");
 	this->m_window.setFramerateLimit(60);
+
+	this->m_background.setTexture(this->m_texManager.getRef, ("background"));
 }
 
 
 Game::~Game()
 {
+	while (!this->m_states.empty()) popState();
+}
+
+void Game::loadTextures()
+{
+	m_texManager.loadTexture("background", "assets/sprites/background.png");
+	m_texManager.loadTexture("bulletEnemy", "assets/sprites/bullet_enemy.png");
+	m_texManager.loadTexture("bulletPlayer", "assets/sprites/bullet_player.png");
+	m_texManager.loadTexture("enemy", "assets/sprites/enemy.png");
+	m_texManager.loadTexture("numeralX", "assets/sprites/numeralX.png");
+	m_texManager.loadTexture("player", "assets/sprites/player.png");
+	m_texManager.loadTexture("playerLife", "assets/sprites/player_life.png");
+	m_texManager.loadTexture("stars", "assets/sprites/stars.png");
+}
+
+void Game::loadPlayer()
+{
+
 }
 

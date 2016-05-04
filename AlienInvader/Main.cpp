@@ -1,15 +1,14 @@
 
-#include <SFML/Window.hpp>
-#include <SFML\Graphics.hpp>
-#include "Application.h"
-#include "TextureManager.h"
-#include <iostream>
+#include "Game.h"
 
 int main()
 {
 
-	Application* app = new Application();
-	app->start();	
+	Game* m_game;
+
+	m_game->gameLoop();
+
+	return 0;
 	
 	
 			

@@ -4,7 +4,7 @@
 int main()
 {
 
-	Game* m_game;
+	Game* m_game = new Game;
 
 	m_game->gameLoop();
 

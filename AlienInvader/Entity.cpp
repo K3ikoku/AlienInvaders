@@ -11,13 +11,23 @@ Entity::~Entity()
 {
 }
 
-void Entity::draw(sf::RenderWindow & m_window)
+void Entity::draw(sf::RenderWindow & window)
 {
-	m_window.draw(this->m_sprite);
+	window.draw(this->m_sprite);
 }
 
 void Entity::update()
 {
-	
+	move();
+	collisionCheck();
+
+}
+
+void Entity::collisionCheck()
+{
+}
+
+void Entity::move()
+{
 
 }

@@ -1,9 +1,21 @@
 #include "TextureManager.h"
+#include <iostream>
 
 
 
 TextureManager::TextureManager()
 {
+	loadTexture("background");
+	loadTexture("bullet_enemy");
+	loadTexture("bullet_player");
+	loadTexture("enemy");
+	loadTexture("numeralX");
+	loadTexture("player");
+	loadTexture("player_life");
+	loadTexture("stars");
+
+	std::cout << "Loaded all textures" << std::endl;
+
 }
 
 
@@ -11,21 +23,26 @@ TextureManager::~TextureManager()
 {
 }
 
-void TextureManager::loadTexture(const std::string & m_name, const std::string & m_fileName)
+void TextureManager::loadTexture(const std::string& name)
 {
 	//Load the texture
 	sf::Texture m_tex;
-	m_tex.loadFromFile(m_fileName);
+	m_tex.loadFromFile("assets/sprites/"  + name + ".png");
 
 	//Add it to the list of textures
-	this->textures[m_name] = m_tex;
+	this->textures[name] = m_tex;
 
 	return;
 }
 
-sf::Texture& TextureManager::getRef(const std::string& m_texture)
+sf::Texture& TextureManager::getRef(const std::string& texture, const bool repeat)
 {
-	return this->textures.at(m_texture);
+	//Function to give a reference to a texture for 
+	sf::Texture& m_tex = this->textures.at(texture);
+	m_tex.setRepeated(repeat);
+	return m_tex;
 }
+
+
 
 

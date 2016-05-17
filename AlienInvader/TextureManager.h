@@ -10,12 +10,13 @@ public:
 	TextureManager();
 	~TextureManager();
 
-	void loadTexture(const std::string& m_name, const std::string &m_fileName);
+	void loadTexture(const std::string& name);
 
-	sf::Texture& getRef(const std::string& m_texture);
+	sf::Texture& getRef(const std::string& texture, const bool repeat);
 
 private:
 	//Array of textures used
 	std::map< std::string, sf::Texture > textures;
+
 };
 

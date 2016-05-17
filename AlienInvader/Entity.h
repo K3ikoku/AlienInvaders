@@ -10,9 +10,13 @@ public:
 
 	float m_moveSpeed = 4;
 
-	virtual void draw(sf::RenderWindow& m_window);
+	virtual void draw(sf::RenderWindow& window);
 
 	virtual void update();
+
+private:
+	virtual void move();
+	virtual void collisionCheck();
 
 };
 

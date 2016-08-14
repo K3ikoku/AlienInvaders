@@ -9,6 +9,7 @@ void Game::gameLoop()
 	{
 		sf::Time m_elapsed = m_clock.restart();
 		float m_dt = m_elapsed.asSeconds();
+		
 		this->m_window.clear(sf::Color::Black);
 		this->m_window.draw(*m_background);
 

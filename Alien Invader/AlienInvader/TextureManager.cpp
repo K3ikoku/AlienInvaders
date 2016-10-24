@@ -40,7 +40,9 @@ sf::Texture& TextureManager::getRef(const std::string& texture, const bool repea
 	//Function to give a reference to a texture for 
 	sf::Texture& m_tex = this->textures.at(texture);
 	m_tex.setRepeated(repeat);
-	return m_tex;
+	
+		return m_tex;
+	
 }
 
 

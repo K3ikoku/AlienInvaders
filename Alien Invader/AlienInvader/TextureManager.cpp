@@ -27,8 +27,11 @@ void TextureManager::loadTexture(const std::string& name)
 {
 	//Load the texture
 	sf::Texture m_tex;
-	m_tex.loadFromFile("assets/sprites/"  + name + ".png");
-
+	if (!m_tex.loadFromFile("assets/sprites/" + name + ".png"))
+	{
+		perror("Could not load texture \n");
+	}
+	std::cout << "Created the " << name << " texture \n";
 	//Add it to the list of textures
 	this->textures[name] = m_tex;
 

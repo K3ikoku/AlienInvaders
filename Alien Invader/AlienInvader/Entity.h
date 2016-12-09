@@ -6,17 +6,11 @@ public:
 	Entity();
 	~Entity();
 
-	sf::Sprite m_sprite;
+	virtual void Draw(sf::RenderWindow& window) = 0;
 
-	float m_moveSpeed = 4;
+	virtual void Update(sf::RenderWindow& window, float timeElapsed) = 0;
 
-	virtual void draw(sf::RenderWindow& window);
-
-	virtual void update();
-
-private:
-	virtual void move();
-	virtual void collisionCheck();
+	static sf::Clock gameClock;
 
 };
 

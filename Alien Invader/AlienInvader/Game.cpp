@@ -1,32 +1,105 @@
 #include "Game.h"
-#include <stack>
 
+
+Game::Game() :
+	m_window(sf::VideoMode(640, 960), "Alien Invader"),
+	m_font(nullptr), m_spawnClock(),
+	m_nrOfLives(0), m_score(0),
+	m_gameOver(false),
+	m_spawnCD(sf::seconds(1.5f)),
+	m_spriteManager(new SpriteManager())
+{
+
+	m_window.setFramerateLimit(60);
+	m_background = m_spriteManager->createSprite("background", 0, 0, 640, 960, true);
+	m_lives = m_spriteManager->createSprite("player_life", 18, 13, 37, 26, false);
+
+}
+Game::~Game()
+{
+}
 void Game::gameLoop()
 {
-	sf::Clock m_clock;
+	sf::Clock clock;
+	m_window.setFramerateLimit(60);
 
-	while (this->m_window.isOpen())
+
+	while (m_window.isOpen())
 	{
-		sf::Time m_elapsed = m_clock.restart();
-		float m_dt = m_elapsed.asSeconds();
+		sf::Event event;
+		while (m_window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				m_window.close();
+			}
+		}
+
+		// Check if player wants to reset
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && m_gameOver)
+		{
+			StartGame();
+		}
 		
-		this->m_window.clear(sf::Color::Black);
-		//this->m_window.draw(*m_background);
+		Gui();
+		Spawner();
+		Update();
+		Collision();
+		Draw();
 
-
-		this->m_window.display();
+		m_timeElapsed = clock.restart().asSeconds();
 	}
 }
-Game::Game()
+
+void Game::StartGame()
 {
+	//Start a new game
+}
 
-	this->m_window.create(sf::VideoMode(640, 960), "Alien Invader");
-	this->m_window.setFramerateLimit(60);
+void Game::Spawner()
+{
+	//Spawn enemies
+}
 
-	//m_background = m_spriteManager->createSprite("background", 0, 0, 640, 960, true);
-	m_background = m_spriteManager->createSprite("background", 0, 0, 640, 960, true);
-
+void Game::Update()
+{
+	//Update all entites
+	for (unsigned int i = 0; i < m_entities.size(); i++)
+	{
+		m_entities[i]->Update(m_window, m_timeElapsed);
+	}
 
 }
+
+void Game::Collision()
+{
+}
+
+void Game::Draw()
+{
+	m_window.clear(sf::Color::Black);
+	m_window.draw(m_background);
+
+
+	for (unsigned int i = 0; i < m_entities.size(); i++)
+	{
+		/*if (m_entities[i]->GetIsDead() == true)
+		{
+			delete m_entities[i];
+			m_entities.erase(m_entities.begin + i);
+			i--;
+		}*/
+
+		//TODO: Continue with the code for drawing stuff
+	}
+	m_window.display();
+}
+
+
+void Game::Gui()
+{
+
+}
+
 
 

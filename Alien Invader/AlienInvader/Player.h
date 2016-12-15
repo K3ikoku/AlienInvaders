@@ -1,9 +1,9 @@
 #pragma once
 #include "Entity.h"
-#include "SpriteManager.h"
-#include "Bullet.h"
+#include "bullet.h"
 
-class Player : Entity
+
+class Player : public Entity
 {
 public:
 	Player(SpriteManager& spriteManager);
@@ -13,19 +13,18 @@ public:
 
 	void Draw(sf::RenderWindow& window) override;
 
-	void Collision(Entity* entity);
+	void Collision(Entity* enemy) override;
 	void SetLives(int lives);
-	void SetScore(int score);
 	void SetPos(float x, float y);
 	void Die();
 
+	bool IsDead() const { return false; };
 
 	int GetLives() const { return m_lives; };
-	int GetScore() const { return m_score; };
 
 	sf::Sprite GetSprite() const { return m_sprite; };
 
-	const std::vector<Bullet*> GetBullets() const { return m_bullets; };
+	const std::vector<Entity*> GetBullets() const { return m_bullets; };
 private:
 
 	void HandleInput(sf::RenderWindow& window, float timeElapsed);
@@ -33,9 +32,7 @@ private:
 
 	int m_lives;
 
-	int m_score;
-
-	std::vector<Bullet*> m_bullets;
+	std::vector<Entity*> m_bullets;
 
 	sf::Sprite m_sprite;
 	sf::Time m_lastFired;

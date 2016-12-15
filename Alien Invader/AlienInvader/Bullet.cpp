@@ -1,12 +1,13 @@
 #include "Bullet.h"
 
 Bullet::Bullet(sf::Vector2f * pos, SpriteManager& spriteManager, DIRECTION dir):
-	m_isDead(false), m_dir(dir)
+	m_isDead(false), 
+	m_dir(dir)
 {
 	
 	width = 9;
 	height = 54;
-	speed = 900;
+	speed = 900.0f;
 
 
 	//Check if the bullet is the player or the enemies and set the sprite accordingly
@@ -66,7 +67,12 @@ void Bullet::Draw(sf::RenderWindow & window)
 	window.draw(m_sprite);
 }
 
+void Bullet::Collision(Entity * entity)
+{
+}
+
 void Bullet::Die()
 {
 	m_isDead = true;
 }
+

@@ -1,37 +1,45 @@
 #pragma once
-#include "SpriteManager.h"
 #include "Entity.h"
-class Enemy : Entity
+#include "Bullet.h"
+#include "Player.h"
+
+class Enemy : public Entity
 {
 public:
-	enum DIR
+	enum LEFT_OR_RIGHT
 	{
 		LEFT,
 		RIGHT,
 		LAST
 	};
-	Enemy(sf::Vector2f pos, SpriteManager& spriteManager);
+
+	Enemy(sf::RenderWindow& window, SpriteManager& spriteManager);
 	~Enemy();
 
 	void Update(sf::RenderWindow& window, float timeElapsed) override;
 
 	void Draw(sf::RenderWindow& window) override;
 
+	void Collision(Entity* player) override;
+
 	void Die();
 
-	void Collision(Entity* player);
+	const std::vector<Entity*> &GetBullets() const { return m_bullets; };
 
 	bool IsDead() const { return m_isDead; };
 
 	sf::Sprite GetSprite() const { return m_sprite; };
 
+
 private:
 
 	void Fire();
+
 	std::string m_bulletType;
 	bool m_isDead;
-	DIR m_dir;
-	std::vector<Bullet*> m_bullets;
+	LEFT_OR_RIGHT m_dir;
+	LEFT_OR_RIGHT m_pos;
+	std::vector<Entity*> m_bullets;
 
 	sf::Sprite m_sprite;
 	sf::Time m_lastFired;

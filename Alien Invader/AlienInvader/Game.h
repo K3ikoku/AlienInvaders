@@ -14,6 +14,7 @@
 class Game
 {
 public:
+
 	Game();
 	~Game();
 
@@ -35,14 +36,13 @@ private:
 	int m_score;
 	bool m_gameOver;
 
-	sf::Time m_spawnTimer;
+	sf::Time m_lastSpawn;
 	sf::Time m_spawnCD;
 	sf::Clock m_spawnClock;
 
 	sf::Font* m_font;
 
 	std::vector<Entity*> m_entities;
-
 	void StartGame();
 
 	void Spawner();

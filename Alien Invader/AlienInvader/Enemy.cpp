@@ -1,8 +1,7 @@
 #include "Enemy.h"
 
 
-
-Enemy::Enemy(sf::Vector2f pos, SpriteManager& spriteManager) :
+Enemy::Enemy(sf::RenderWindow& window, SpriteManager& spriteManager) :
 	m_isDead(false),
 	m_cd(sf::seconds(0.5f)),
 	m_spriteManager(spriteManager)
@@ -11,12 +10,24 @@ Enemy::Enemy(sf::Vector2f pos, SpriteManager& spriteManager) :
 
 	width = 91;
 	height = 91;
-	speed = 400;
+	speed = 400.0f;
+
+	yPos = 0.0f;
 	//Get a random value of the enum DIR
-	m_dir = static_cast<DIR>(rand() % LAST);
+	m_dir = static_cast<LEFT_OR_RIGHT>(rand() % LAST);
+	m_pos = static_cast<LEFT_OR_RIGHT>(rand() & LAST);
+
+	if (m_pos == LEFT)
+	{
+		xPos = width;
+	}
+	else
+	{
+		xPos = window.getSize().x - width;
+	}
 
 	m_sprite.setOrigin(width / 2.0f, height / 2.0f);
-	m_sprite = m_spriteManager.createSprite("enemy", pos.x, pos.y, width, height, false);
+	m_sprite = m_spriteManager.createSprite("enemy", xPos, yPos, width, height, false);
 }
 
 
@@ -77,7 +88,7 @@ void Enemy::Draw(sf::RenderWindow & window)
 		if (m_bullets[i]->IsDead())
 		{
 			delete m_bullets[i];
-			m_bullets.erase(m_bullets.begin + i);
+			m_bullets.erase(m_bullets.begin() + i);
 			i--;
 		}
 		else
@@ -95,6 +106,22 @@ void Enemy::Die()
 
 void Enemy::Collision(Entity * player)
 {
+	//Check if the ship is colliding with any of the players bullets or any of the players bullets and destroy them both
+	if (m_sprite.getGlobalBounds().intersects(player->GetSprite().getGlobalBounds()))
+	{
+		Die();
+		player->Die();
+	}
+	for (unsigned int i = 0; i < player->GetBullets().size(); i++)
+	{
+		Entity* target = player->GetBullets()[i];
+		if (m_sprite.getGlobalBounds().intersects(target->GetSprite().getGlobalBounds()))
+		{
+			Die();
+
+			target->Die();
+		}
+	}
 }
 
 void Enemy::Fire()
@@ -102,7 +129,7 @@ void Enemy::Fire()
 	if (m_lastFired + m_cd < gameClock.getElapsedTime())
 	{
 		sf::Vector2f* m_bulletPos = new sf::Vector2f(xPos, yPos);
-
+		
 		Bullet* bullet = new Bullet(m_bulletPos, m_spriteManager, Bullet::DOWN);
 		m_bullets.push_back(bullet);
 

@@ -7,7 +7,7 @@ SpriteManager::SpriteManager() :
 {
 }
 
-sf::Sprite SpriteManager::createSprite(const std::string& name, const int posX, const int posY, 
+sf::Sprite SpriteManager::createSprite(const std::string& name, const float posX, const float posY, 
 	const int sizeX, const int sizeY, const bool repeat)
 {
 	//Create a sprite 
@@ -17,7 +17,7 @@ sf::Sprite SpriteManager::createSprite(const std::string& name, const int posX, 
 	//Set position and size of the sprite
 	m_sprite.setTextureRect(sf::IntRect(posX, posY, sizeX, sizeY));
 	
-	//Return sprite
+	//Return sprite 
 	return m_sprite;
 }
 

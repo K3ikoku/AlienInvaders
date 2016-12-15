@@ -3,7 +3,7 @@
 
 Game::Game() :
 	m_window(sf::VideoMode(640, 960), "Alien Invader"),
-	m_font(nullptr), m_spawnClock(),
+	m_font(nullptr), m_lastSpawn(),
 	m_nrOfLives(0), m_score(0),
 	m_gameOver(false),
 	m_spawnCD(sf::seconds(1.5f)),
@@ -57,12 +57,30 @@ void Game::gameLoop()
 
 void Game::StartGame()
 {
-	//Start a new game
+	//Check if vector is empty 
+	if (!m_entities.empty())
+	{
+		for (unsigned int i = 0; i < m_entities.size(); i++)
+		{
+			delete m_entities[i];
+			m_entities.erase(m_entities.begin() + i);
+			i--;
+		}
+	}
+	//Create the player and put it in the first position of the entities vector
+	Player* player = new Player(*m_spriteManager);
+	m_entities[0] = player;
 }
 
 void Game::Spawner()
 {
-	//Spawn enemies
+	//If it was more than 1.5 seconds since the last spawn spawn another enemy
+	if (m_lastSpawn + m_spawnCD < m_spawnClock.getElapsedTime())
+	{
+		Enemy* enemy = new Enemy(m_window, *m_spriteManager);
+		m_entities.push_back(enemy);
+		m_lastSpawn = m_spawnClock.getElapsedTime();
+	}
 }
 
 void Game::Update()
@@ -77,6 +95,13 @@ void Game::Update()
 
 void Game::Collision()
 {
+	//Run the collision function for the player against all enemies and all enemies against the player
+	for (unsigned int i = 1; i < m_entities.size(); i++)
+	{
+		m_entities[0]->Collision(m_entities[i]);
+
+		m_entities[i]->Collision(m_entities[0]);
+	}
 }
 
 void Game::Draw()
@@ -87,14 +112,18 @@ void Game::Draw()
 
 	for (unsigned int i = 0; i < m_entities.size(); i++)
 	{
-		/*if (m_entities[i]->GetIsDead() == true)
+		if (m_entities[i]->IsDead())
 		{
 			delete m_entities[i];
-			m_entities.erase(m_entities.begin + i);
+			m_entities.erase(m_entities.begin() + i);
+			m_score += 10;
 			i--;
-		}*/
+		}
+		else
+		{
+			m_entities[i]->Draw(m_window);
+		}
 
-		//TODO: Continue with the code for drawing stuff
 	}
 	m_window.display();
 }

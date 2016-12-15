@@ -10,7 +10,7 @@ public:
 	SpriteManager();
 	~SpriteManager();
 
-	sf::Sprite createSprite(const std::string& name, const int posX, const int posY, 
+	sf::Sprite createSprite(const std::string& name, const float posX, const float posY, 
 				const int sizeX, const int sizeY, const bool repeat);
 
 private:

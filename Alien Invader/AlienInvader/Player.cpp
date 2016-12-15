@@ -4,7 +4,6 @@
 
 Player::Player(SpriteManager& spriteManager):
 	m_lives(10),
-	m_score(0),
 	m_lastFired(),
 	m_cd(sf::seconds(0.5f)),
 	m_spriteManager(spriteManager)
@@ -48,7 +47,7 @@ void Player::Draw(sf::RenderWindow & window)
 		if (m_bullets[i]->IsDead())
 		{
 			delete m_bullets[i];
-			m_bullets.erase(m_bullets.begin + i);
+			m_bullets.erase(m_bullets.begin() + i);
 			i--;
 		}
 		else
@@ -58,13 +57,14 @@ void Player::Draw(sf::RenderWindow & window)
 	}
 }
 
-void Player::Collision(Entity* entity)
+void Player::Collision(Entity* enemy)
 {
-	for (unsigned int i = 0; i < entity->GetBullets().size; i++)
+	for (unsigned int i = 0; i < enemy->GetBullets().size(); i++)
 	{
-		if (m_sprite.getGlobalBounds().intersects(entity->GetBullets[i]->GetSprite().getGlobalBounds()))
+		Entity* target = enemy->GetBullets()[i];
+		if (m_sprite.getGlobalBounds().intersects(target->GetSprite().getGlobalBounds()))
 		{
-			entity->GetBullets[i]->Die();
+			target->Die();
 
 			Die();
 		}
@@ -74,11 +74,6 @@ void Player::Collision(Entity* entity)
 void Player::SetLives(int lives)
 {
 	m_lives = lives;
-}
-
-void Player::SetScore(int score)
-{
-	m_score = score;
 }
 
 void Player::SetPos(float x, float y)

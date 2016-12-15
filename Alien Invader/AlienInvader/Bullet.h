@@ -1,7 +1,6 @@
 #pragma once
 #include "Entity.h"
-#include "SpriteManager.h"
-#include <SFML\Graphics.hpp>
+
 class Bullet :
 	public Entity
 {
@@ -20,18 +19,21 @@ public:
 
 	void Draw(sf::RenderWindow& window) override;
 
-	void Die();
+	void Collision(Entity* entity) override;
+
+	void Die() override;
 
 	bool IsDead() const { return m_isDead; };
 
 	sf::Sprite GetSprite() const { return m_sprite; };
+
+
 
 private:
 	sf::Sprite m_sprite;
 	std::string m_bulletType;
 	DIRECTION m_dir;
 	bool m_isDead;
-
 
 };
 

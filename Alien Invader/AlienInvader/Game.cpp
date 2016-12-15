@@ -12,8 +12,12 @@ Game::Game() :
 
 	m_window.setFramerateLimit(60);
 	m_background = m_spriteManager->createSprite("background", 0, 0, 640, 960, true);
-	m_lives = m_spriteManager->createSprite("player_life", 18, 13, 37, 26, false);
 
+	m_lives.setOrigin(37.0f / 2.0f, 26.0f / 2.0f);
+	m_lives = m_spriteManager->createSprite("player_life", 40, 35, 37, 26, false);
+	
+	m_numeralX.setOrigin(17 / 2, 17 / 2);
+	m_numeralX = m_spriteManager->createSprite("numeralX", 70, 35, 17, 17, false);
 }
 Game::~Game()
 {

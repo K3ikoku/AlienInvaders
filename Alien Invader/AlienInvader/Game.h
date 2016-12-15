@@ -28,7 +28,7 @@ private:
 
 	sf::Sprite m_background;
 	sf::Sprite m_lives;
-	sf::Sprite m_number;
+	sf::Sprite m_numeralX;
 
 	float m_timeElapsed;
 	int m_nrOfLives;

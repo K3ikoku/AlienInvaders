@@ -13,6 +13,9 @@ public:
 
 	virtual void Draw(sf::RenderWindow& window) = 0;
 	
+	const std::vector<Bullet*> GetBullets() const { return m_bullets; };
+
+	virtual void Die() = 0;
 
 protected:
 	int width;
@@ -21,6 +24,7 @@ protected:
 	float xPos;
 	float yPos;
 
+	std::vector<Bullet*> m_bullets;
 	static sf::Clock gameClock;
 
 };

@@ -23,6 +23,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GUIManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="TextureManager.h" />
@@ -107,12 +109,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Game Dev\Visual Studio\AlienInvaders\Alien Invader\SFML-2.3.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\VisualStudioProjects\AlienInvader\Alien Invader\SFML-2.3.2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Game Dev\Visual Studio\AlienInvaders\Alien Invader\SFML-2.3.2\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\VisualStudioProjects\AlienInvader\Alien Invader\SFML-2.3.2\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalIncludeDirectories)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -141,14 +143,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Game Dev\Visual Studio\AlienInvaders\Alien Invader\SFML-2.3.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\VisualStudioProjects\AlienInvader\Alien Invader\SFML-2.3.2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\Game Dev\Visual Studio\AlienInvaders\Alien Invader\SFML-2.3.2\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\VisualStudioProjects\AlienInvader\Alien Invader\SFML-2.3.2\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-window.lib;sfml-graphics.lib;sfml-system.lib;%(AdditionalIncludeDirectories)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "SpriteManager.h"
+#include "GUIManager.h"
 #include <vector>
 
 
@@ -26,9 +27,11 @@ public:
 
 private:
 	SpriteManager* m_spriteManager;
+	GUIManager* m_guiManager;
+	Player* m_player;
 
 	sf::Sprite m_background;
-	sf::Sprite m_lives;
+	sf::Sprite m_livesSpr;
 	sf::Sprite m_numeralX;
 
 	float m_timeElapsed;
@@ -41,8 +44,13 @@ private:
 	sf::Clock m_spawnClock;
 
 	sf::Font* m_font;
+	sf::Text m_guiScoreText;
+	sf::Text m_guiScorePoints;
+	sf::Text m_guiLives;
+	sf::Text m_guiGameOver;
 
 	std::vector<Entity*> m_entities;
+	std::vector<sf::Drawable> m_guiElements;
 	void StartGame();
 
 	void Spawner();
@@ -50,10 +58,5 @@ private:
 	void Collision();
 	void Draw();
 	void Gui();
-
-
-
-
-	
 };
 

@@ -8,16 +8,39 @@ Game::Game() :
 	m_gameOver(false),
 	m_spawnCD(sf::seconds(1.5f)),
 	m_spriteManager(new SpriteManager())
+
 {
 
 	m_window.setFramerateLimit(60);
 	m_background = m_spriteManager->createSprite("background", 0, 0, 640, 960, true);
 
-	m_lives.setOrigin(37.0f / 2.0f, 26.0f / 2.0f);
-	m_lives = m_spriteManager->createSprite("player_life", 40, 35, 37, 26, false);
-	
+	m_font = new sf::Font();
+	if (!m_font->loadFromFile("assets/fonts/kenvector_future.ttf"))
+	{
+		perror("Font could not be loaded\n");
+	}
+
+	m_guiManager = new GUIManager(m_font, sf::Color::White);
+
+	m_guiLives = m_guiManager->CreateNumber(25, 80.0f, 20.0f);
+	//m_guiElements.push_back(m_guiLives);
+
+	m_guiScorePoints = m_guiManager->CreateNumber(25, 460.0f, 15.0f);
+	//m_guiElements.push_back(m_guiScorePoints);
+
+	m_guiGameOver = m_guiManager->CreateText("Game Over", 40, (m_window.getSize().x / 2.0f), (m_window.getSize().y / 2.0f));
+	//m_guiElements.push_back(m_guiGameOver);
+
+	m_guiScoreText = m_guiManager->CreateText("Score", 25, 350.0f, 15.0f);
+	//m_guiElements.push_back(m_guiScoreText);
+
+	m_livesSpr.setOrigin(37.0f / 2.0f, 26.0f / 2.0f);
+	m_livesSpr = m_spriteManager->createSprite("player_life", 40, 35, 37, 26, false);
+	//m_guiElements.push_back(m_livesSpr);
+
 	m_numeralX.setOrigin(17 / 2, 17 / 2);
 	m_numeralX = m_spriteManager->createSprite("numeralX", 70, 35, 17, 17, false);
+	//m_guiElements.push_back(m_numeralX);
 }
 Game::~Game()
 {
@@ -57,6 +80,8 @@ void Game::gameLoop()
 
 void Game::StartGame()
 {
+	//TODO: Do a check if really supposed to start the game
+	//TOOD: Do a check for when to print out game over
 	//Check if vector is empty 
 	if (!m_entities.empty())
 	{
@@ -125,13 +150,36 @@ void Game::Draw()
 		}
 
 	}
+	//Draw all the gui elements
+	m_window.draw(m_guiLives);
+	m_window.draw(m_guiScorePoints);
+	m_window.draw(m_guiGameOver);
+	m_window.draw(m_guiScoreText);
+	m_window.draw(m_livesSpr);
+	m_window.draw(m_numeralX);
+
+
+
 	m_window.display();
 }
 
 
 void Game::Gui()
 {
+	m_player = dynamic_cast<Player*>(m_entities[0]);
+	m_nrOfLives = m_player->GetLives();
 
+
+	if (!(m_nrOfLives > 0))
+	{
+		m_gameOver = true;
+		m_nrOfLives = 0;
+		delete m_entities[0];
+		m_entities.erase(m_entities.begin());
+	}
+
+	m_guiLives.setString(std::to_string(m_nrOfLives));
+	m_guiScorePoints.setString(std::to_string(m_score));
 }
 
 

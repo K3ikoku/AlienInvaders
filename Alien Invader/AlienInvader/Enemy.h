@@ -6,45 +6,54 @@
 class Enemy : public Entity
 {
 public:
-	enum LEFT_OR_RIGHT
+	enum DIRECTION
 	{
 		LEFT,
 		RIGHT,
 		LAST
 	};
 
-	Enemy(sf::RenderWindow& window, SpriteManager& spriteManager);
+	Enemy(sf::RenderWindow& window, DrawableManager& drawManager, std::vector<Entity*>& entities);
 	~Enemy();
+
+	const TYPE& GetType() override;
+
+	const TYPE& GetTargetType() override;
 
 	void Update(sf::RenderWindow& window, float timeElapsed) override;
 
 	void Draw(sf::RenderWindow& window) override;
 
-	void Collision(Entity* player) override;
+	void Collision(std::vector<Entity*> vector) override;
 
-	void Die();
+	void Die() override;
 
-	const std::vector<Entity*> &GetBullets() const { return m_bullets; };
+	bool IsDead() override;
 
-	bool IsDead() const { return m_isDead; };
+	bool WasKilled();
 
-	sf::Sprite GetSprite() const { return m_sprite; };
+	sf::Sprite GetSprite() override;
 
 
 private:
+	std::vector<Entity*>& m_entities;
 
 	void Fire();
 
-	std::string m_bulletType;
+	TYPE m_type;
+	TYPE m_targetType;
+
 	bool m_isDead;
-	LEFT_OR_RIGHT m_dir;
-	LEFT_OR_RIGHT m_pos;
-	std::vector<Entity*> m_bullets;
+	bool m_wasKilled;
+
+	DIRECTION m_dir;
+	DIRECTION m_pos;
 
 	sf::Sprite m_sprite;
+	sf::Texture m_texture;
 	sf::Time m_lastFired;
 	sf::Time m_cd;
 
-	SpriteManager& m_spriteManager;
+	DrawableManager& m_drawManager;
 };
 

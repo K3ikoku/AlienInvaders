@@ -1,10 +1,14 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(sf::RenderWindow& window, SpriteManager& spriteManager) :
+Enemy::Enemy(sf::RenderWindow& window, DrawableManager& drawManager, std::vector<Entity*>& entities) :
 	m_isDead(false),
+	m_wasKilled(false),
 	m_cd(sf::seconds(0.5f)),
-	m_spriteManager(spriteManager)
+	m_drawManager(drawManager),
+	m_type(TYPE::ENEMY),
+	m_targetType(TYPE::PLAYER),
+	m_entities(entities)
 {
 	srand((unsigned int)time(NULL));
 
@@ -13,9 +17,9 @@ Enemy::Enemy(sf::RenderWindow& window, SpriteManager& spriteManager) :
 	speed = 400.0f;
 
 	yPos = 0.0f;
-	//Get a random value of the enum DIR
-	m_dir = static_cast<LEFT_OR_RIGHT>(rand() % LAST);
-	m_pos = static_cast<LEFT_OR_RIGHT>(rand() & LAST);
+	//Get a random value of the enum to select a random direction and spawn point
+	m_dir = static_cast<DIRECTION>(rand() % LAST);
+	m_pos = static_cast<DIRECTION>(rand() & LAST);
 
 	if (m_pos == LEFT)
 	{
@@ -26,13 +30,25 @@ Enemy::Enemy(sf::RenderWindow& window, SpriteManager& spriteManager) :
 		xPos = window.getSize().x - width;
 	}
 
+	m_texture = m_drawManager.GetTextureRef("enemy", false, true);
+	m_sprite.setTexture(m_texture);
 	m_sprite.setOrigin(width / 2.0f, height / 2.0f);
-	m_sprite = m_spriteManager.createSprite("enemy", xPos, yPos, width, height, false);
+	m_sprite.setPosition(xPos, yPos);
 }
 
 
 Enemy::~Enemy()
 {
+}
+
+const Entity::TYPE & Enemy::GetType()
+{
+	return m_type;
+}
+
+const Entity::TYPE & Enemy::GetTargetType()
+{
+	return m_targetType;
 }
 
 void Enemy::Update(sf::RenderWindow & window, float timeElapsed)
@@ -72,66 +88,62 @@ void Enemy::Update(sf::RenderWindow & window, float timeElapsed)
 	m_sprite.setPosition(xPos, yPos);
 
 	Fire();
-
-	for (unsigned int i = 0; i < m_bullets.size(); i++)
-	{
-		m_bullets[i]->Update(window, timeElapsed);
-	}
 }
 
 void Enemy::Draw(sf::RenderWindow & window)
 {
 	window.draw(m_sprite);
-
-	for (unsigned int i = 0; i < m_bullets.size(); i++)
-	{
-		if (m_bullets[i]->IsDead())
-		{
-			delete m_bullets[i];
-			m_bullets.erase(m_bullets.begin() + i);
-			i--;
-		}
-		else
-		{
-			m_bullets[i]->Draw(window);
-		}
-	}
-
 }
 
 void Enemy::Die()
 {
 	m_isDead = true;
+	//std::cout << this << "died\n";
 }
 
-void Enemy::Collision(Entity * player)
+void Enemy::Collision(std::vector<Entity*> vector)
 {
-	//Check if the ship is colliding with any of the players bullets or any of the players bullets and destroy them both
-	if (m_sprite.getGlobalBounds().intersects(player->GetSprite().getGlobalBounds()))
+	//Loop through all entities in the vector and destroy them if they are supposed to collide
+	for (unsigned int i = 0; i < vector.size(); i++)
 	{
-		Die();
-		player->Die();
-	}
-	for (unsigned int i = 0; i < player->GetBullets().size(); i++)
-	{
-		Entity* target = player->GetBullets()[i];
-		if (m_sprite.getGlobalBounds().intersects(target->GetSprite().getGlobalBounds()))
+		if (!vector[i]->IsDead() && vector[i]->GetTargetType() == m_type)
 		{
-			Die();
+			if (m_sprite.getGlobalBounds().intersects(vector[i]->GetSprite().getGlobalBounds()) && vector[i] != this)
+			{
 
-			target->Die();
+				vector[i]->Die();
+
+				Die();
+				m_wasKilled = true;
+			}
 		}
 	}
+}
+
+bool Enemy::IsDead()
+{
+	return m_isDead;
+}
+
+bool Enemy::WasKilled()
+{
+	return m_wasKilled;
+}
+
+sf::Sprite Enemy::GetSprite()
+{
+	 return m_sprite;
 }
 
 void Enemy::Fire()
 {
 	if (m_lastFired + m_cd < gameClock.getElapsedTime())
 	{
+		//Take the current position of the ship and create the bullet in its position
 		sf::Vector2f* m_bulletPos = new sf::Vector2f(xPos, yPos);
 		
-		Bullet* bullet = new Bullet(m_bulletPos, m_spriteManager, Bullet::DOWN);
-		m_bullets.push_back(bullet);
+		Bullet* bullet = new Bullet(m_bulletPos, m_drawManager, Bullet::DOWN, m_entities);
+		m_entities.push_back(bullet);
 
 		m_lastFired = gameClock.getElapsedTime();
 	}

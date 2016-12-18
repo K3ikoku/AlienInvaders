@@ -1,29 +1,32 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include "SpriteManager.h"
-//#include "Bullet.h"
+#include "DrawableManager.h"
 
 
 class Entity
 {
 public:
 	Entity();
-	~Entity();
+	enum TYPE
+	{
+		PLAYER,
+		ENEMY,
+		BULLET
+	};
+	virtual const TYPE& GetType() = 0;
+	virtual const TYPE& GetTargetType() = 0;
 
-	
 	virtual void Update(sf::RenderWindow& window, float timeElapsed) = 0;
 
 	virtual void Draw(sf::RenderWindow& window) = 0;
 	
-	virtual void Collision(Entity* enemy) = 0;
-
 	virtual void Die() = 0;
 
-	sf::Sprite GetSprite() const { return m_sprite; };
+	virtual void Collision(std::vector<Entity*> vector) = 0;
 
-	const std::vector<Entity*> &GetBullets() const { return m_bullets; };
+	virtual sf::Sprite GetSprite() = 0;
 
-	bool IsDead() const { return m_isDead; };
+	virtual bool IsDead() = 0;
 	
 
 protected:
@@ -32,11 +35,7 @@ protected:
 	float speed;
 	float xPos;
 	float yPos;
-	bool m_isDead;
-	sf::Sprite m_sprite;
-	//std::vector<Bullet*> m_bullets;
 	static sf::Clock gameClock;
-	std::vector<Entity*> m_bullets;
 
 };
 

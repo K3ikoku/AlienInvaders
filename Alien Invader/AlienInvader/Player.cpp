@@ -2,23 +2,38 @@
 
 
 
-Player::Player(SpriteManager& spriteManager):
+Player::Player(DrawableManager& drawManager, std::vector<Entity*>& entities):
 	m_lives(10),
 	m_lastFired(),
 	m_cd(sf::seconds(0.5f)),
-	m_spriteManager(spriteManager)
+	m_drawManager(drawManager),
+	m_type(TYPE::PLAYER),
+	m_targetType(TYPE::ENEMY),
+	m_entities(entities)
 {
 	width = 112;
 	height = 75;
 	speed = 700.0f;
 
+	m_texture = m_drawManager.GetTextureRef("player", false, true);
+	m_sprite.setTexture(m_texture);
 	m_sprite.setOrigin(width / 2.0f, height / 2.0f);
-	m_sprite = m_spriteManager.createSprite("player", 320, 920, width, height, false);
+	m_sprite.setPosition(320, 920);
 }
 
 
 Player::~Player()
 {
+}
+
+const Entity::TYPE& Player::GetType()
+{
+	return m_type;
+}
+
+const Entity::TYPE& Player::GetTargetType()
+{
+	return m_targetType;
 }
 
 void Player::Update(sf::RenderWindow & window, float timeElapsed)
@@ -28,62 +43,46 @@ void Player::Update(sf::RenderWindow & window, float timeElapsed)
 	yPos = m_sprite.getPosition().y;
 
 	HandleInput(window, timeElapsed);
-
-	//Update the bullets
-	for (unsigned int i = 0; i < m_bullets.size(); i++)
-	{
-		m_bullets[i]->Update(window, timeElapsed);
-	}
 }
 
 void Player::Draw(sf::RenderWindow & window)
 {
 	//Draw player sprite
 	window.draw(m_sprite);
+}
 
-	//Draw bullets
-	for (unsigned int i = 0; i < m_bullets.size(); i++)
+void Player::Collision(std::vector<Entity*> vector)
+{
+	//Loop through all entities in the vector and destroy them if they are supposed to collide
+	for (unsigned int i = 0; i < vector.size(); i++)
 	{
-		if (m_bullets[i]->IsDead())
+		if (!vector[i]->IsDead() && vector[i]->GetTargetType() == m_type)
 		{
-			delete m_bullets[i];
-			m_bullets.erase(m_bullets.begin() + i);
-			i--;
-		}
-		else
-		{
-			m_bullets[i]->Draw(window);
+			if (m_sprite.getGlobalBounds().intersects(vector[i]->GetSprite().getGlobalBounds()) && vector[i] != this)
+			{
+
+				vector[i]->Die();
+
+				Die();
+			}
 		}
 	}
 }
 
-void Player::Collision(Entity* enemy)
-{
-	for (unsigned int i = 0; i < enemy->GetBullets().size(); i++)
-	{
-		Entity* target = enemy->GetBullets()[i];
-		if (m_sprite.getGlobalBounds().intersects(target->GetSprite().getGlobalBounds()))
-		{
-			target->Die();
-
-			Die();
-		}
-	}
-}
-
-void Player::SetLives(int lives)
-{
-	m_lives = lives;
-}
-
-void Player::SetPos(float x, float y)
-{
-	m_sprite.setPosition(x, y);
-}
 
 void Player::Die()
 {
 	m_lives -= 1;
+}
+
+bool Player::IsDead()
+{
+	return m_isDead;
+}
+
+sf::Sprite Player::GetSprite()
+{
+	return m_sprite;
 }
 
 void Player::HandleInput(sf::RenderWindow & window, float elapsedTime)
@@ -99,7 +98,7 @@ void Player::HandleInput(sf::RenderWindow & window, float elapsedTime)
 		else
 		{
 			//Move the player
-			xPos -= speed * elapsedTime;
+			xPos -= elapsedTime * speed;
 		}
 	}
 
@@ -154,21 +153,22 @@ void Player::HandleInput(sf::RenderWindow & window, float elapsedTime)
 		Fire();
 	}
 
-	for (unsigned int i = 0; i < m_bullets.size(); i++)
-	{
-		m_bullets[i]->Update(window, elapsedTime);
-	}
+	m_sprite.setPosition(xPos, yPos);
 }
 
 void Player::Fire()
 {
-	if (m_lastFired + m_cd < gameClock.getElapsedTime())
+	if (m_lives > 0)
 	{
-		sf::Vector2f* m_bulletPos = new sf::Vector2f(xPos, yPos);
+		if (m_lastFired + m_cd < gameClock.getElapsedTime())
+		{
+			//Take the current position of the player and create the bullet in that position
+			sf::Vector2f* m_bulletPos = new sf::Vector2f(xPos, yPos);
 
-		Bullet* bullet = new Bullet(m_bulletPos, m_spriteManager, Bullet::UP);
-		m_bullets.push_back(bullet);
+			Bullet* bullet = new Bullet(m_bulletPos, m_drawManager, Bullet::UP, m_entities);
+			m_entities.push_back(bullet);
 
-		m_lastFired = gameClock.getElapsedTime();
+			m_lastFired = gameClock.getElapsedTime();
+		}
 	}
 }

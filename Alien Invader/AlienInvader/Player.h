@@ -6,39 +6,43 @@
 class Player : public Entity
 {
 public:
-	Player(SpriteManager& spriteManager);
+	Player(DrawableManager& drawManagers, std::vector<Entity*>& entities);
 	~Player();
+
+	const TYPE& GetType() override;
+	const TYPE& GetTargetType() override;
 
 	void Update(sf::RenderWindow& window, float timeElapsed) override;
 
 	void Draw(sf::RenderWindow& window) override;
 
-	void Collision(Entity* enemy) override;
-	void SetLives(int lives);
-	void SetPos(float x, float y);
+	void Collision(std::vector<Entity*> vector) override;
+
 	void Die();
 
-	bool IsDead() const { return false; };
+	bool IsDead() override;
 
 	int GetLives() const { return m_lives; };
 
-	sf::Sprite GetSprite() const { return m_sprite; };
+	sf::Sprite GetSprite() override;
 
-	const std::vector<Entity*> GetBullets() const { return m_bullets; };
 private:
+	std::vector<Entity*>& m_entities;
 
-	void HandleInput(sf::RenderWindow& window, float timeElapsed);
+	TYPE m_type;
+	TYPE m_targetType;
+	void HandleInput(sf::RenderWindow& window, float elapsedTime);
 	void Fire();
 
 	int m_lives;
-
-	std::vector<Entity*> m_bullets;
+	bool m_isDead;
 
 	sf::Sprite m_sprite;
+	sf::Texture m_texture;
 	sf::Time m_lastFired;
 	sf::Time m_cd;
 
-	SpriteManager& m_spriteManager;
+	DrawableManager& m_drawManager;
 	
 
 };

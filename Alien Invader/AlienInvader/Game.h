@@ -3,11 +3,9 @@
 #include <stack>
 #include <SFML\Graphics.hpp>
 #include <SFML\System.hpp>
-#include "TextureManager.h"
+#include "DrawableManager.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "SpriteManager.h"
-#include "GUIManager.h"
 #include <vector>
 
 
@@ -17,27 +15,30 @@ class Game
 public:
 
 	Game();
-	~Game();
 
 	sf::RenderWindow m_window;
 
-
-	void gameLoop();
+	void GameLoop();
 
 
 private:
-	SpriteManager* m_spriteManager;
-	GUIManager* m_guiManager;
-	Player* m_player;
+	std::vector<Entity*> m_entities;
 
-	sf::Sprite m_background;
+	DrawableManager* m_drawManager;
+
+	sf::Texture m_backgroundTex;
+	sf::Texture m_livesTex;
+	sf::Texture m_numeralTex;
+
+	sf::Sprite m_backgroundSpr;
 	sf::Sprite m_livesSpr;
-	sf::Sprite m_numeralX;
+	sf::Sprite m_numeralXSpr;
 
 	float m_timeElapsed;
 	int m_nrOfLives;
 	int m_score;
 	bool m_gameOver;
+	bool m_newGame;
 
 	sf::Time m_lastSpawn;
 	sf::Time m_spawnCD;
@@ -49,8 +50,6 @@ private:
 	sf::Text m_guiLives;
 	sf::Text m_guiGameOver;
 
-	std::vector<Entity*> m_entities;
-	std::vector<sf::Drawable> m_guiElements;
 	void StartGame();
 
 	void Spawner();
